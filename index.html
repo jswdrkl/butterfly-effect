@@ -1,434 +1,473 @@
 <!DOCTYPE html>
-<html lang="mr" class="scroll-smooth">
+<html lang="mr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>‘बटरफ्लाय इफेक्ट’ : हवामानापेक्षाही बरेच काही..</title>
+  <title>‘बटरफ्लाय इफेक्ट’ हवामानापेक्षाही बरेच काही..</title>
   
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            plex: ['"IBM Plex Sans Devanagari"', '"IBM Plex Sans"', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              50: '#f5f7ff',
-              100: '#ebf0fe',
-              500: '#6366f1',
-              600: '#4f46e5',
-              900: '#1e1b4b',
-            }
-          }
-        }
-      }
-    }
-  </script>
-
-  <!-- Google Fonts: IBM Plex Sans & IBM Plex Sans Devanagari -->
+  <!-- IBM Plex Sans Devanagari & IBM Plex Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Devanagari:wght@300;400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Devanagari:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --bg-page: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #24292f;
+      --text-sub: #57606a;
+      --accent-soft: #e0e7ff;
+      --line-color: #e2e8f0;
+      --share-btn-bg: #4f46e5;
+      --share-btn-hover: #4338ca;
+      --share-btn-text: #ffffff;
+      --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+      --theme-btn-bg: #e2e8f0;
+      --theme-btn-text: #1e293b;
+    }
+
+    [data-theme="dark"] {
+      --bg-page: #0f172a;
+      --bg-card: #1e293b;
+      --text-main: #f1f5f9;
+      --text-sub: #94a3b8;
+      --accent-soft: #312e81;
+      --line-color: #334155;
+      --share-btn-bg: #6366f1;
+      --share-btn-hover: #4f46e5;
+      --share-btn-text: #ffffff;
+      --card-shadow: 0 4px 25px -2px rgba(0, 0, 0, 0.45);
+      --theme-btn-bg: #334155;
+      --theme-btn-text: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: 'IBM Plex Sans Devanagari', 'IBM Plex Sans', sans-serif;
-      text-rendering: optimizeLegibility;
-      -webkit-font-smoothing: antialiased;
+      font-family: "IBM Plex Sans Devanagari", "IBM Plex Sans", sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      transition: background-color 0.3s ease, color 0.3s ease;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 48px;
+      line-height: 1.85;
+      word-break: normal;
+      overflow-wrap: break-word;
+      hyphens: none;
     }
 
-    /* Strict requirements: justified alignment, no broken words on any device */
-    .article-text {
+    .container {
+      width: 100%;
+      max-width: 760px;
+      background-color: var(--bg-card);
+      border-radius: 18px;
+      padding: 36px 32px;
+      box-shadow: var(--card-shadow);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 24px 18px;
+        border-radius: 14px;
+      }
+    }
+
+    /* Top Controls */
+    .toolbar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .theme-toggle {
+      background: var(--theme-btn-bg);
+      color: var(--theme-btn-text);
+      border: none;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s ease, transform 0.1s ease;
+    }
+
+    .theme-toggle:active {
+      transform: scale(0.97);
+    }
+
+    /* Animated Graphic Header */
+    .graphic-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    svg.butterfly-graphic {
+      width: 130px;
+      height: 130px;
+      filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.25));
+    }
+
+    @keyframes wingFlutterLeft {
+      0%, 100% {
+        transform: rotateY(0deg) scale(1);
+      }
+      50% {
+        transform: rotateY(48deg) scale(0.92);
+      }
+    }
+
+    @keyframes wingFlutterRight {
+      0%, 100% {
+        transform: rotateY(0deg) scale(1);
+      }
+      50% {
+        transform: rotateY(-48deg) scale(0.92);
+      }
+    }
+
+    @keyframes swirlRotate {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .wing-left {
+      transform-origin: 100px 100px;
+      animation: wingFlutterLeft 1.7s ease-in-out infinite;
+    }
+
+    .wing-right {
+      transform-origin: 100px 100px;
+      animation: wingFlutterRight 1.7s ease-in-out infinite;
+    }
+
+    .attractor-loops {
+      transform-origin: 100px 100px;
+      animation: swirlRotate 20s linear infinite;
+    }
+
+    /* Title Styling */
+    .title-area {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .title-main {
+      font-size: 1.55rem;
+      font-weight: 400; /* Not bold */
+      color: var(--text-main);
+      line-height: 1.4;
+      display: block;
+    }
+
+    .title-divider {
+      border: 0;
+      height: 1px;
+      background: var(--line-color);
+      max-width: 180px;
+      margin: 12px auto;
+    }
+
+    .title-sub {
+      font-size: 1.15rem; /* Smaller font size */
+      font-weight: 400; /* Not bold */
+      color: var(--text-sub);
+      line-height: 1.4;
+      display: block;
+    }
+
+    /* Document Body Typography */
+    .content p {
       text-align: justify;
-      text-justify: inter-word;
-      hyphens: none !important;
-      -webkit-hyphens: none !important;
-      word-break: normal !important;
-      overflow-wrap: break-word !important;
+      margin-bottom: 1.25rem;
+      font-size: 1.05rem;
+      color: var(--text-main);
     }
 
-    /* Subtle decorative float animation for butterfly */
-    @keyframes gentleFlutter {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-5px) rotate(0.6deg); }
+    .centered-symbol {
+      text-align: center !important;
+      font-size: 1.15rem;
+      letter-spacing: 0.35em;
+      color: #6366f1;
+      margin: 1.75rem 0 !important;
     }
 
-    .flutter-anim {
-      animation: gentleFlutter 7s ease-in-out infinite;
+    .centered-text {
+      text-align: center !important;
     }
 
-    /* Toast notification transitions */
-    #shareToast {
-      transition: opacity 0.3s ease, transform 0.3s ease;
+    .italic-text {
+      font-style: italic;
+    }
+
+    /* Share Section */
+    .share-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 36px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line-color);
+    }
+
+    .share-button {
+      background-color: var(--share-btn-bg);
+      color: var(--share-btn-text);
+      border: none;
+      border-radius: 9999px;
+      padding: 12px 30px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+      transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    }
+
+    .share-button:hover {
+      background-color: var(--share-btn-hover);
+      box-shadow: 0 6px 18px rgba(79, 70, 229, 0.4);
+    }
+
+    .share-button:active {
+      transform: scale(0.97);
+    }
+
+    .share-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background-color: #10b981;
+      color: white;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28), opacity 0.3s ease;
+      z-index: 1000;
+    }
+
+    .share-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
   </style>
 </head>
+<body>
 
-<body class="bg-stone-50 text-stone-800 dark:bg-[#0f121a] dark:text-[#e4e7ee] transition-colors duration-300 min-h-screen">
-
-  <!-- Top floating action bar -->
-  <header class="sticky top-0 z-40 backdrop-blur-md bg-stone-50/85 dark:bg-[#0f121a]/85 border-b border-stone-200/80 dark:border-stone-800/80 transition-colors">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-      <span class="text-xs sm:text-sm font-medium tracking-wide text-stone-500 dark:text-stone-400 select-none">
-        ‘बटरफ्लाय इफेक्ट’
-      </span>
-
-      <!-- Action buttons: Share & Theme Switcher -->
-      <div class="flex items-center space-x-2.5">
-        <!-- Share button -->
-        <button id="shareButton" type="button" aria-label="शेअर करा" class="p-2.5 rounded-full text-stone-600 hover:text-stone-900 hover:bg-stone-200/60 dark:text-stone-300 dark:hover:text-white dark:hover:bg-stone-800/80 transition-all border border-stone-200 dark:border-stone-800 shadow-sm active:scale-95">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
-          </svg>
-        </button>
-
-        <!-- Theme toggle button -->
-        <button id="themeToggle" type="button" aria-label="थीम बदला" class="p-2.5 rounded-full text-stone-600 hover:text-stone-900 hover:bg-stone-200/60 dark:text-stone-300 dark:hover:text-white dark:hover:bg-stone-800/80 transition-all border border-stone-200 dark:border-stone-800 shadow-sm active:scale-95">
-          <!-- Moon icon for light mode -->
-          <svg id="moonIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-          </svg>
-          <!-- Sun icon for dark mode -->
-          <svg id="sunIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-        </button>
-      </div>
+  <div class="container">
+    <!-- Theme Switcher -->
+    <div class="toolbar">
+      <button class="theme-toggle" id="themeToggle" aria-label="थीम बदला">
+        <span id="themeIcon">🌙</span>
+        <span id="themeLabel">Dark</span>
+      </button>
     </div>
-  </header>
 
-  <main class="max-w-3xl mx-auto px-5 sm:px-8 py-8 sm:py-12">
-
-    <!-- Document Main Title -->
-    <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-stone-900 dark:text-stone-100 mb-8 sm:mb-10 text-center leading-relaxed">
-      ‘बटरफ्लाय इफेक्ट’ : हवामानापेक्षाही बरेच काही..
-    </h1>
-
-    <!-- Colourful inline SVG representing the document's concepts:
-         Lorenz attractor butterfly, chaotic weather spiral on left, radiant positive ripples on right -->
-    <div class="w-full mb-10 sm:mb-14 overflow-hidden rounded-2xl shadow-xl border border-stone-200/90 dark:border-stone-800/90 bg-gradient-to-br from-indigo-950 via-slate-900 to-stone-950 p-2 sm:p-4">
-      <svg class="w-full h-auto flutter-anim" viewBox="0 0 900 480" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="बटरफ्लाय इफेक्ट आणि लॉरेन्झ अट्रॅक्टरचे चित्र">
+    <!-- Animated Light Colorful SVG Graphic -->
+    <div class="graphic-container">
+      <svg class="butterfly-graphic" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <!-- Gradients -->
-          <linearGradient id="bgGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#1e1b4b" stop-opacity="0.7"/>
-            <stop offset="50%" stop-color="#0f172a" stop-opacity="0.9"/>
-            <stop offset="100%" stop-color="#022c22" stop-opacity="0.7"/>
-          </linearGradient>
-
-          <linearGradient id="leftWingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id="wingGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="#38bdf8"/>
-            <stop offset="35%" stop-color="#6366f1"/>
-            <stop offset="70%" stop-color="#a855f7"/>
-            <stop offset="100%" stop-color="#ec4899"/>
+            <stop offset="50%" stop-color="#818cf8"/>
+            <stop offset="100%" stop-color="#c084fc"/>
           </linearGradient>
-
-          <linearGradient id="rightWingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#f59e0b"/>
-            <stop offset="40%" stop-color="#10b981"/>
-            <stop offset="75%" stop-color="#06b6d4"/>
-            <stop offset="100%" stop-color="#3b82f6"/>
+          <linearGradient id="wingGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#f472b6"/>
+            <stop offset="50%" stop-color="#a78bfa"/>
+            <stop offset="100%" stop-color="#38bdf8"/>
           </linearGradient>
-
-          <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.65"/>
-            <stop offset="50%" stop-color="#f59e0b" stop-opacity="0.25"/>
-            <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
-          </radialGradient>
-
-          <radialGradient id="stormGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#6366f1" stop-opacity="0.7"/>
-            <stop offset="60%" stop-color="#38bdf8" stop-opacity="0.2"/>
-            <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
-          </radialGradient>
-
-          <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="6" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
+          <linearGradient id="loopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fb7185" stop-opacity="0.35"/>
+            <stop offset="50%" stop-color="#60a5fa" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#34d399" stop-opacity="0.35"/>
+          </linearGradient>
         </defs>
 
-        <!-- Dynamic Dark Tech Backdrop -->
-        <rect width="900" height="480" rx="16" fill="url(#bgGlow)"/>
-
-        <!-- Left Chaotic Weather / Lorenz Field Aura -->
-        <circle cx="260" cy="240" r="170" fill="url(#stormGlow)" />
-        <!-- Right Positive Feedback / Emotional Echo Aura -->
-        <circle cx="640" cy="240" r="170" fill="url(#sunGlow)" />
-
-        <!-- Weather Storm Isobars / Spirals on Left -->
-        <g stroke="#38bdf8" stroke-width="1.2" opacity="0.35" fill="none">
-          <ellipse cx="230" cy="240" rx="180" ry="120" stroke-dasharray="6,6" transform="rotate(-15 230 240)"/>
-          <ellipse cx="230" cy="240" rx="130" ry="85" stroke-dasharray="4,4" transform="rotate(-25 230 240)"/>
-          <path d="M 120 280 Q 180 340 260 300 T 380 260" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="5,5"/>
-          <path d="M 90 200 Q 170 120 270 170 T 360 210" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <!-- Dynamic Lorenz Attractor Loops -->
+        <g class="attractor-loops">
+          <ellipse cx="78" cy="100" rx="42" ry="32" stroke="url(#loopGrad)" stroke-width="2.5" stroke-dasharray="5 3"/>
+          <ellipse cx="122" cy="100" rx="42" ry="32" stroke="url(#loopGrad)" stroke-width="2.5" stroke-dasharray="5 3"/>
         </g>
 
-        <!-- Right Harmonious Concentric Ripples (Gratitude & Growth) -->
-        <g stroke="#34d399" stroke-width="1.2" opacity="0.4" fill="none">
-          <circle cx="650" cy="240" r="60" stroke-dasharray="4,4"/>
-          <circle cx="650" cy="240" r="110" stroke-dasharray="5,5" stroke="#fbbf24"/>
-          <circle cx="650" cy="240" r="160" stroke-dasharray="6,6" stroke="#34d399"/>
-          <circle cx="650" cy="240" r="210" stroke-dasharray="8,8" stroke="#38bdf8"/>
+        <!-- Left Butterfly Wing -->
+        <g class="wing-left">
+          <path d="M100 95 C80 50 25 55 35 95 C40 115 75 110 100 105 Z" fill="url(#wingGrad1)" fill-opacity="0.85"/>
+          <path d="M100 105 C75 110 40 125 55 145 C70 160 90 135 100 112 Z" fill="url(#wingGrad2)" fill-opacity="0.75"/>
         </g>
 
-        <!-- Lorenz Attractor Wing Loops (Mathematical Chaos Equation Representation) -->
-        <!-- Left Wing Phase Trajectories -->
-        <g filter="url(#softGlow)">
-          <path d="M 450 240 C 370 130, 210 110, 160 200 C 110 290, 240 370, 360 330 C 420 310, 440 260, 450 240 Z" fill="none" stroke="url(#leftWingGrad)" stroke-width="4.5" opacity="0.95" />
-          <path d="M 450 240 C 390 160, 260 140, 200 210 C 150 280, 260 340, 350 310 C 400 290, 430 260, 450 240 Z" fill="none" stroke="#60a5fa" stroke-width="2.5" opacity="0.8" />
-          <path d="M 450 240 C 410 180, 300 170, 250 220 C 200 270, 280 320, 340 295 C 380 280, 420 260, 450 240 Z" fill="none" stroke="#c084fc" stroke-width="2" opacity="0.85" />
-
-          <!-- Right Wing Phase Trajectories -->
-          <path d="M 450 240 C 530 130, 690 110, 740 200 C 790 290, 660 370, 540 330 C 480 310, 460 260, 450 240 Z" fill="none" stroke="url(#rightWingGrad)" stroke-width="4.5" opacity="0.95" />
-          <path d="M 450 240 C 510 160, 640 140, 700 210 C 750 280, 640 340, 550 310 C 500 290, 470 260, 450 240 Z" fill="none" stroke="#34d399" stroke-width="2.5" opacity="0.8" />
-          <path d="M 450 240 C 490 180, 600 170, 650 220 C 700 270, 620 320, 560 295 C 520 280, 480 260, 450 240 Z" fill="none" stroke="#fbbf24" stroke-width="2" opacity="0.85" />
+        <!-- Right Butterfly Wing -->
+        <g class="wing-right">
+          <path d="M100 95 C120 50 175 55 165 95 C160 115 125 110 100 105 Z" fill="url(#wingGrad2)" fill-opacity="0.85"/>
+          <path d="M100 105 C125 110 160 125 145 145 C130 160 110 135 100 112 Z" fill="url(#wingGrad1)" fill-opacity="0.75"/>
         </g>
 
-        <!-- Central Butterfly Body and Antennae -->
-        <g fill="#f8fafc">
-          <ellipse cx="450" cy="240" rx="6.5" ry="50" fill="#f1f5f9" />
-          <circle cx="450" cy="184" r="8.5" fill="#f8fafc" />
-          <!-- Antennae -->
-          <path d="M 450 180 Q 436 150 415 142" stroke="#f8fafc" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-          <path d="M 450 180 Q 464 150 485 142" stroke="#f8fafc" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-          <circle cx="413" cy="141" r="3.5" fill="#f43f5e" />
-          <circle cx="487" cy="141" r="3.5" fill="#10b981" />
-        </g>
-
-        <!-- Numerical simulation sparkle: 0.506127 -> 0.506 subtle floating data points -->
-        <g fill="#e0e7ff" font-family="'IBM Plex Sans', sans-serif" font-size="11" opacity="0.55">
-          <text x="170" y="110">0.506127</text>
-          <text x="290" y="90">0.506...</text>
-          <text x="70" y="240">Δt → ∞</text>
-          <text x="690" y="115">Feedback Loop</text>
-          <text x="740" y="380">Resilience</text>
-        </g>
-
-        <!-- Floating ambient light spores / particles -->
-        <g fill="#ffffff">
-          <circle cx="210" cy="180" r="2.5" opacity="0.75" />
-          <circle cx="320" cy="120" r="1.8" opacity="0.6" />
-          <circle cx="280" cy="360" r="2" opacity="0.7" />
-          <circle cx="150" cy="310" r="1.5" opacity="0.5" />
-          <circle cx="690" cy="180" r="2.5" opacity="0.8" fill="#fde047" />
-          <circle cx="580" cy="130" r="2" opacity="0.7" fill="#6ee7b7" />
-          <circle cx="760" cy="270" r="2" opacity="0.75" fill="#38bdf8" />
-          <circle cx="620" cy="350" r="2.2" opacity="0.8" fill="#f472b6" />
-        </g>
+        <!-- Center Body & Antennae -->
+        <path d="M100 82 L100 125" stroke="#475569" stroke-width="3" stroke-linecap="round"/>
+        <path d="M100 82 Q90 68 85 70" stroke="#64748b" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <path d="M100 82 Q110 68 115 70" stroke="#64748b" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <circle cx="100" cy="80" r="3" fill="#334155"/>
       </svg>
     </div>
 
-    <!-- Content Section 1: Introduction and Lorenz's Discovery -->
-    <div class="article-text text-base sm:text-lg leading-[2.1] sm:leading-[2.2] text-stone-800 dark:text-stone-200 space-y-7">
-      
-      <p>
-        ‘बटरफ्लाय इफेक्ट’ ही एक अशी संकल्पना आहे, जिच्यानुसार एखाद्या लहान, वरवर क्षुल्लक वाटणाऱ्या बदलामुळे खूप मोठे आणि अनपेक्षित परिणाम घडून येऊ शकतात. या संकल्पनेचे मूळ १९६० च्या दशकात हवामानशास्त्रज्ञ एडवर्ड नॉर्टन लॉरेन्झ यांनी केलेल्या संशोधनात आहे. संशोधन करत असताना त्यांच्या असे लक्षात आले की गुंतागुंतीच्या प्रणालींमध्ये (complex systems) छोट्या घटनांचे परिणाम मोठे आणि अनपेक्षित असू शकतात.
-      </p>
-
-      <p>
-        लॉरेन्झ यांना हा सिद्धांत एका हवामानाच्या सिम्युलेशन मॉडेलवर काम करत असताना अपघातानेच सापडला. एकदा एका प्रयोगाला लागणारा वेळ वाचवण्यासाठी त्यांनी आधी केलेल्या सिम्युलेशनमधील काही आकडेवारी पुन्हा वापरायचे ठरवले. तसे करताना त्यांनी त्यातील एक आकडा ०.५०६१२७ ऐवजी त्यात किरकोळ बदल करून ०.५०६ असा घेतला. परंतु त्यांच्या असे लक्षात आले की या अगदी लहान बदलामुळे ते ज्यावर काम करत होते त्या हवामानाचे भाकीत करण्याच्या दीर्घकालीन मॉडेलने दिलेला अंदाज पूर्णपणे बदलून गेला होता.
-      </p>
-
-      <!-- Atmospheric Quote Highlight -->
-      <div class="my-9 p-6 sm:p-7 rounded-2xl bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/40 dark:to-purple-950/30 border-l-4 border-indigo-500 shadow-sm">
-        <p class="text-base sm:text-lg italic font-medium text-indigo-950 dark:text-indigo-200">
-          हीच संवेदनशील गोष्ट ‘बटरफ्लाय इफेक्ट’ या रूपकाद्वारे सांगितली जाते : “ब्राझीलमधील फुलपाखराच्या पंखांच्या फडफडण्याने टेक्सासमध्ये मोठे वादळ येऊ शकते”.
-        </p>
-      </div>
-
-      <p>
-        सुरुवातीस लॉरेन्झ यांनी फुलपाखराऐवजी एका समुद्री पक्षाच्या पंखांच्या फडफडण्याचे उदाहरण दिले होते. त्यांनी म्हटले होते की सीगलच्या पंखांची फडफड हवामानाचा मार्ग कायमचा बदलू शकते, पण नंतर अगदी सूक्ष्म घटनेचे वर्णन करण्यासाठी म्हणून त्यांनी 'फुलपाखरू' हे अधिक प्रभावी रूपक वापरले.
-      </p>
-
-      <p>
-        लॉरेन्झ यांचा मूळ मुद्दा हा होता की हवामानासारख्या गुंतागुंतीच्या प्रणाली मुळातच ‘अभूतपूर्व’ असतात. कारण त्या सुरुवातीस होणाऱ्या लहान-सहान बदलांवर मोठ्या प्रमाणावर अवलंबून असतात. आपण हवामानातील प्रत्येक लहान गोष्ट मोजू किंवा जाणून घेऊ शकत नाही, त्यामुळेच हवामानाचा दीर्घकालीन अंदाज लावणे जवळजवळ अशक्य आहे.
-      </p>
-
+    <!-- Title with line between and smaller font for subtitle, neither bold -->
+    <div class="title-area">
+      <span class="title-main">‘बटरफ्लाय इफेक्ट’</span>
+      <hr class="title-divider">
+      <span class="title-sub">हवामानापेक्षाही बरेच काही..</span>
     </div>
 
-    <!-- Divider motif matching the exact document separator *** -->
-    <div class="flex items-center justify-center my-12 sm:my-14 space-x-3 text-stone-400 dark:text-stone-600 select-none" aria-hidden="true">
-      <span class="text-xl font-bold tracking-widest text-indigo-500/80">✦</span>
-      <span class="text-2xl font-bold tracking-widest text-indigo-600">✦</span>
-      <span class="text-xl font-bold tracking-widest text-indigo-500/80">✦</span>
+    <!-- Document Content -->
+    <div class="content">
+      <p>‘बटरफ्लाय इफेक्ट’ ही एक अशी संकल्पना आहे, जिच्यानुसार एखाद्या लहान, वरवर क्षुल्लक वाटणाऱ्या बदलामुळे खूप मोठे आणि अनपेक्षित परिणाम घडून येऊ शकतात. या संकल्पनेचे मूळ १९६० च्या दशकात हवामानशास्त्रज्ञ एडवर्ड नॉर्टन लॉरेन्झ यांनी केलेल्या संशोधनात आहे. संशोधन करत असताना त्यांच्या असे लक्षात आले की गुंतागुंतीच्या प्रणालींमध्ये (complex systems) छोट्या घटनांचे परिणाम मोठे आणि अनपेक्षित असू शकतात.</p>
+
+      <p>लॉरेन्झ यांना हा सिद्धांत एका हवामानाच्या सिम्युलेशन मॉडेलवर काम करत असताना अपघातानेच सापडला. एकदा एका प्रयोगाला लागणारा वेळ वाचवण्यासाठी त्यांनी आधी केलेल्या सिम्युलेशनमधील काही आकडेवारी पुन्हा वापरायचे ठरवले. तसे करताना त्यांनी त्यातील एक आकडा ०.५०६१२७ ऐवजी त्यात किरकोळ बदल करून ०.५०६ असा घेतला. परंतु त्यांच्या असे लक्षात आले की या अगदी लहान बदलामुळे ते ज्यावर काम करत होते त्या हवामानाचे भाकीत करण्याच्या दीर्घकालीन मॉडेलने दिलेला अंदाज पूर्णपणे बदलून गेला होता.</p>
+
+      <p>हीच संवेदनशील गोष्ट ‘बटरफ्लाय इफेक्ट’ या रूपकाद्वारे सांगितली जाते : “ब्राझीलमधील फुलपाखराच्या पंखांच्या फडफडण्याने टेक्सासमध्ये मोठे वादळ येऊ शकते”.</p>
+
+      <p>सुरुवातीस लॉरेन्झ यांनी फुलपाखराऐवजी एका समुद्री पक्षाच्या पंखांच्या फडफडण्याचे उदाहरण दिले होते. त्यांनी म्हटले होते की सीगलच्या पंखांची फडफड हवामानाचा मार्ग कायमचा बदलू शकते, पण नंतर अगदी सूक्ष्म घटनेचे वर्णन करण्यासाठी म्हणून त्यांनी 'फुलपाखरू' हे अधिक प्रभावी रूपक वापरले.</p>
+
+      <p>लॉरेन्झ यांचा मूळ मुद्दा हा होता की हवामानासारख्या गुंतागुंतीच्या प्रणाली मुळातच ‘अभूतपूर्व’ असतात. कारण त्या सुरुवातीस होणाऱ्या लहान-सहान बदलांवर मोठ्या प्रमाणावर अवलंबून असतात. आपण हवामानातील प्रत्येक लहान गोष्ट मोजू किंवा जाणून घेऊ शकत नाही, त्यामुळेच हवामानाचा दीर्घकालीन अंदाज लावणे जवळजवळ अशक्य आहे.</p>
+
+      <p class="centered-symbol">☸☸☸</p>
+
+      <p>आपल्या जीवनात केल्या जाणाऱ्या किंवा घडून येणाऱ्या लहान कृती, छोटे निर्णय किंवा किरकोळ वाटणाऱ्या भावना एका अशा घटनाक्रमाला सुरुवात करू शकतात, ज्यामुळे आपल्या आयुष्याची दिशा पूर्णपणे बदलून जाऊ शकते. ज्याप्रमाणे लॉरेन्झ यांच्या आकडेवारीत केलेल्या छोट्या बदलाने त्यांच्या हवामानाच्या मॉडेलला एका वेगळ्याच भविष्याकडे नेले, त्याचप्रमाणे आपला एखादा छोटा निर्णय; जसे की एखाद्या कार्यक्रमाचे आमंत्रण स्वीकारणे किंवा घरीच थांबणे, एखाद्या परिस्थितीत आपले मत मांडणे किंवा शांत बसणे यासारखी त्यावेळी क्षुल्लक वाटणारी गोष्ट आपल्या वैयक्तिक आयुष्याच्या 'अंदाजा'ला एका नवीन मार्गावर घेऊन जाऊ शकते.</p>
+
+      <p>आपण स्वतःशी कसा संवाद साधतो ही गोष्ट आपल्या मानसिक स्थितीची 'सुरुवातीची परिस्थिती' अर्थात फुलापाखराच्या पंखांचे फडफडणे असू शकते. म्हणजे जर आपण स्वतःशी बोलण्याच्या पद्धतीत थोडासा पण सातत्यपूर्ण बदल केला, म्हणजे दोष देण्याऐवजी ऐवजी स्वतःला समजून घेतले; आहे तसे स्वीकारले तर त्याचे पुढे जाऊन त्याचे सकारात्मक परिणाम दिसायला लागतात. यामुळे पुढचा प्रत्येक चांगला विचार करणे सोपे होत जाते.</p>
+
+      <p>ही केवळ एक चांगली कल्पना नाहीये. मानसशास्त्रज्ञ देखील याच तत्त्वाचा उपयोग करतात. ते लोकांना स्वतःवर टीका करण्याऐवजी स्वतःबद्दल सहानुभूती (self-compassion) ठेवण्याचा सराव करण्यास सांगतात. या लहान पावलांमुळे धैर्य वाढते. हा छोटासा सकारात्मक बदल हळूहळू आपला आत्मविश्वास आणि लवचिकता वाढवतो, ज्यामुळे मोठी ध्येये देखील आटोक्यात यायला मदत होते.</p>
+
+      <p class="centered-symbol">☸☸☸</p>
+
+      <p>‘बटरफ्लाय इफेक्ट’ आपल्या वैयक्तिक नात्यांमध्ये सतत काम करत असतो. म्हणजे आपल्या रोजच्या आयुष्यात होणारे लहान-सहान संवाद नात्याचे दीर्घकालीन 'हवामान' ठरवतात. जाणीवपूर्वक अंगी बाणवलेला कृतज्ञतेचा भाव एका शक्तिशाली feedback loop प्रमाणे काम करतो.</p>
+
+      <p>रोजच्या आचरणात, जवळच्या-लांबच्या आणि सजीव-निर्जीव अशा सर्वच नात्यांमध्ये सातत्याने कृतज्ञता ठेवणे हे म्हणजे त्या फुलपाखराच्या पंखांची फडफड आहे. ही एक छोटीशी पण सकारात्मक कृती त्यावेळी केवळ एक चांगला क्षण निर्माण करत नाही, तर ती संपूर्ण वातावरण बदलते आणि समोरच्या व्यक्तीलाही सकारात्मक प्रतिसाद देण्यासाठी जणू भाग पाडते! Please अशी सुरुवात करून केलेली नम्र विनंती सहसा अव्हेरली जात नाही असा आपला अनुभव असतोच.</p>
+
+      <p>कृतज्ञतेमुळे 'भावनिक प्रतिध्वनी' (emotional echoes) निर्माण होतात, जे नात्यात, मग ते कोणतेही असो; एक विश्वास आणि स्थैर्य आणतात. म्हणजेच नात्यातील हवामानाचा एक स्थिर आणि सकारात्मक दीर्घकालीन अंदाज.</p>
+
+      <p>याउलट, छोटे गैरसमज किंवा नकारात्मक संवाद हळूहळू नात्यात कटुता निर्माण करू शकतात. त्यामुळे, नात्यांना स्थिर ठेवण्यासाठी कृतज्ञता हा केवळ एक पर्याय नसून तो एक जाणीवपूर्वक निवडलेला दृष्टिकोन ठरतो.</p>
+
+      <p>दैनंदिन जीवनातील छोटे निर्णय आपल्या आयुष्याला पूर्णपणे नवीन दिशा देऊ शकतात. आरोग्याविषयीचे छोटे निर्णय अनेक लहान निवडींमधून आपले दीर्घकालीन आरोग्य ठरवतात. निरोगी आणि आनंदी-समाधानी आयुष्य हे एका मोठ्या बदलाने नाही, तर कित्येक छोट्या निर्णयांच्या एकत्रित परिणामातून घडते.</p>
+
+      <p>सतत मोठ्या संधीची वाट पाहण्याऐवजी कौशल्ये सुधारण्यासाठी केलेले छोटे पण सातत्यपूर्ण प्रयत्न अधिक प्रभावी ठरतात. प्रत्येक लहान कृती निवडलेल्या मार्गावर चांगल्या दिशेने थोडे पुढे नेते.</p>
+
+      <p>हे जग अनेकदा गोंधळाने भरून वहात असलेले आणि अनपेक्षित वाटत असले तरी ‘बटरफ्लाय इफेक्ट’ आपल्याला जाणीव करून देतो की छोटे पण हेतुपुरस्सर केलेले प्रयत्न मोठे परिणाम घडवू शकतात.</p>
+
+      <p>आपण, आपल्यातला प्रत्येकच जण एक स्वतंत्र फुलपाखरू आहे. जाणीवपूर्वक केलेली चांगल्या सवयी आणि कृतज्ञतेची भावना जोपासण्याची लहान पण हेतुपुरस्सर निवड पंखांची एक फडफड आहे, जी भविष्याचे हवामान घडवू शकते.</p>
+
+      <p>चला तर मग!!</p>
+
+      <p class="centered-symbol">☸☸☸</p>
+
+      <p class="centered-text">☸ २०२५११३० ☸</p>
     </div>
 
-    <!-- Content Section 2: Personal Life & Psychology -->
-    <div class="article-text text-base sm:text-lg leading-[2.1] sm:leading-[2.2] text-stone-800 dark:text-stone-200 space-y-7">
-      
-      <p>
-        आपल्या जीवनात केल्या जाणाऱ्या किंवा घडून येणाऱ्या लहान कृती, छोटे निर्णय किंवा किरकोळ वाटणाऱ्या भावना एका अशा घटनाक्रमाला सुरुवात करू शकतात, ज्यामुळे आपल्या आयुष्याची दिशा पूर्णपणे बदलून जाऊ शकते. ज्याप्रमाणे लॉरेन्झ यांच्या आकडेवारीत केलेल्या छोट्या बदलाने त्यांच्या हवामानाच्या मॉडेलला एका वेगळ्याच भविष्याकडे नेले, त्याचप्रमाणे आपला एखादा छोटा निर्णय; जसे की एखाद्या कार्यक्रमाचे आमंत्रण स्वीकारणे किंवा घरीच थांबणे, एखाद्या परिस्थितीत आपले मत मांडणे किंवा शांत बसणे यासारखी त्यावेळी क्षुल्लक वाटणारी गोष्ट आपल्या वैयक्तिक आयुष्याच्या 'अंदाजा'ला एका नवीन मार्गावर घेऊन जाऊ शकते.
-      </p>
-
-      <p>
-        आपण स्वतःशी कसा संवाद साधतो ही गोष्ट आपल्या मानसिक स्थितीची 'सुरुवातीची परिस्थिती' अर्थात फुलापाखराच्या पंखांचे फडफडणे असू शकते. म्हणजे जर आपण स्वतःशी बोलण्याच्या पद्धतीत थोडासा पण सातत्यपूर्ण बदल केला, म्हणजे दोष देण्याऐवजी स्वतःला समजून घेतले; आहे तसे स्वीकारले तर त्याचे पुढे जाऊन त्याचे सकारात्मक परिणाम दिसायला लागतात. यामुळे पुढचा प्रत्येक चांगला विचार करणे सोपे होत जाते.
-      </p>
-
-      <p>
-        ही केवळ एक चांगली कल्पना नाहीये. मानसशास्त्रज्ञ देखील याच तत्त्वाचा उपयोग करतात. ते लोकांना स्वतःवर टीका करण्याऐवजी स्वतःबद्दल सहानुभूती (self-compassion) ठेवण्याचा सराव करण्यास सांगतात. या लहान पावलांमुळे धैर्य वाढते. हा छोटासा सकारात्मक बदल हळूहळू आपला आत्मविश्वास आणि लवचिकता वाढवतो, ज्यामुळे मोठी ध्येये देखील आटोक्यात यायला मदत होते.
-      </p>
-
+    <!-- Share Button -->
+    <div class="share-container">
+      <button class="share-button" id="shareBtn" aria-label="शेअर करा">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"></circle>
+          <circle cx="6" cy="12" r="3"></circle>
+          <circle cx="18" cy="19" r="3"></circle>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+        </svg>
+        <span>शेअर करा</span>
+      </button>
     </div>
-
-    <!-- Divider motif matching the exact document separator *** -->
-    <div class="flex items-center justify-center my-12 sm:my-14 space-x-3 text-stone-400 dark:text-stone-600 select-none" aria-hidden="true">
-      <span class="text-xl font-bold tracking-widest text-indigo-500/80">✦</span>
-      <span class="text-2xl font-bold tracking-widest text-indigo-600">✦</span>
-      <span class="text-xl font-bold tracking-widest text-indigo-500/80">✦</span>
-    </div>
-
-    <!-- Content Section 3: Relationships, Gratitude, and Closing -->
-    <div class="article-text text-base sm:text-lg leading-[2.1] sm:leading-[2.2] text-stone-800 dark:text-stone-200 space-y-7">
-
-      <p>
-        ‘बटरफ्लाय इफेक्ट’ आपल्या वैयक्तिक नात्यांमध्ये सतत काम करत असतो. म्हणजे आपल्या रोजच्या आयुष्यात होणारे लहान-सहान संवाद नात्याचे दीर्घकालीन 'हवामान' ठरवतात. जाणीवपूर्वक अंगी बाणवलेला कृतज्ञतेचा भाव एका शक्तिशाली feedback loop प्रमाणे काम करतो.
-      </p>
-
-      <p>
-        रोजच्या आचरणात, जवळच्या-लांबच्या आणि सजीव-निर्जीव अशा सर्वच नात्यांमध्ये सातत्याने कृतज्ञता ठेवणे हे म्हणजे त्या फुलपाखराच्या पंखांची फडफड आहे. ही एक छोटीशी पण सकारात्मक कृती त्यावेळी केवळ एक चांगला क्षण निर्माण करत नाही, तर ती संपूर्ण वातावरण बदलते आणि समोरच्या व्यक्तीलाही सकारात्मक प्रतिसाद देण्यासाठी जणू भाग पाडते! Please अशी सुरुवात करून केलेली नम्र विनंती सहसा अव्हेरली जात नाही असा आपला अनुभव असतोच.
-      </p>
-
-      <p>
-        कृतज्ञतेमुळे 'भावनिक प्रतिध्वनी' (emotional echoes) निर्माण होतात, जे नात्यात, मग ते कोणतेही असो; एक विश्वास आणि स्थैर्य आणतात. म्हणजेच नात्यातील हवामानाचा एक स्थिर आणि सकारात्मक दीर्घकालीन अंदाज.
-      </p>
-
-      <p>
-        याउलट, छोटे गैरसमज किंवा नकारात्मक संवाद हळूहळू नात्यात कटुता निर्माण करू शकतात. त्यामुळे, नात्यांना स्थिर ठेवण्यासाठी कृतज्ञता हा केवळ एक पर्याय नसून तो एक जाणीवपूर्वक निवडलेला दृष्टिकोन ठरतो.
-      </p>
-
-      <p>
-        दैनंदिन जीवनातील छोटे निर्णय आपल्या आयुष्याला पूर्णपणे नवीन दिशा देऊ शकतात. आरोग्याविषयीचे छोटे निर्णय अनेक लहान निवडींमधून आपले दीर्घकालीन आरोग्य ठरवतात. निरोगी आणि आनंदी-समाधानी आयुष्य हे एका मोठ्या बदलाने नाही, तर कित्येक छोट्या निर्णयांच्या एकत्रित परिणामातून घडते.
-      </p>
-
-      <p>
-        सतत मोठ्या संधीची वाट पाहण्याऐवजी कौशल्ये सुधारण्यासाठी केलेले छोटे पण सातत्यपूर्ण प्रयत्न अधिक प्रभावी ठरतात. प्रत्येक लहान कृती निवडलेल्या मार्गावर चांगल्या दिशेने थोडे पुढे नेते.
-      </p>
-
-      <p>
-        हे जग अनेकदा गोंधळाने भरून वहात असलेले आणि अनपेक्षित वाटत असले तरी ‘बटरफ्लाय इफेक्ट’ आपल्याला जाणीव करून देतो की छोटे पण हेतुपुरस्सर केलेले प्रयत्न मोठे परिणाम घडवू शकतात.
-      </p>
-
-      <p>
-        आपण, आपल्यातला प्रत्येकच जण एक स्वतंत्र फुलपाखरू आहे. जाणीवपूर्वक केलेली चांगल्या सवयी आणि कृतज्ञतेची भावना जोपासण्याची लहान पण हेतुपुरस्सर निवड पंखांची एक फडफड आहे, जी भविष्याचे हवामान घडवू शकते.
-      </p>
-
-      <p class="text-xl sm:text-2xl font-semibold text-stone-900 dark:text-stone-100 pt-4">
-        चला तर मग!!
-      </p>
-
-      <p class="text-stone-500 dark:text-stone-400 font-mono text-sm tracking-wider">
-        ~ २०२५११३०
-      </p>
-
-    </div>
-
-  </main>
-
-  <!-- Toast Feedback message (No browser alert()) -->
-  <div id="shareToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 translate-y-4 px-4 py-2.5 rounded-xl bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 text-xs sm:text-sm shadow-2xl font-medium flex items-center space-x-2">
-    <svg class="w-4 h-4 text-emerald-400 dark:text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
-    </svg>
-    <span id="toastMessage">लिंक कॉपी झाली आहे!</span>
   </div>
 
+  <div class="share-toast" id="shareToast">लिंक कॉपी झाली!</div>
+
   <script>
-    (function () {
-      const htmlEl = document.documentElement;
-      const themeToggleBtn = document.getElementById('themeToggle');
-      const sunIcon = document.getElementById('sunIcon');
-      const moonIcon = document.getElementById('moonIcon');
-      const shareBtn = document.getElementById('shareButton');
-      const shareToast = document.getElementById('shareToast');
-      const toastMessage = document.getElementById('toastMessage');
+    // Theme switching logic
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeLabel = document.getElementById('themeLabel');
 
-      let toastTimeout = null;
-
-      // Toast notification helper without alert()
-      function showToast(msg) {
-        toastMessage.textContent = msg;
-        shareToast.classList.remove('opacity-0', 'translate-y-4');
-        shareToast.classList.add('opacity-100', 'translate-y-0');
-
-        if (toastTimeout) clearTimeout(toastTimeout);
-        toastTimeout = setTimeout(() => {
-          shareToast.classList.remove('opacity-100', 'translate-y-0');
-          shareToast.classList.add('opacity-0', 'translate-y-4');
-        }, 3000);
+    function applyTheme(isDark) {
+      if (isDark) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        themeIcon.textContent = '☀️';
+        themeLabel.textContent = 'Light';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        themeIcon.textContent = '🌙';
+        themeLabel.textContent = 'Dark';
       }
+    }
 
-      // Initialize Theme based on saved preference or system preference
-      function applyTheme(isDark) {
-        if (isDark) {
-          htmlEl.classList.add('dark');
-          sunIcon.classList.remove('hidden');
-          moonIcon.classList.add('hidden');
-        } else {
-          htmlEl.classList.remove('dark');
-          sunIcon.classList.add('hidden');
-          moonIcon.classList.remove('hidden');
-        }
-      }
+    const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    let isDarkMode = systemPrefersDark;
+    applyTheme(isDarkMode);
 
-      const savedTheme = localStorage.getItem('theme');
-      const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const initialDark = savedTheme ? savedTheme === 'dark' : systemPrefersDark;
-      applyTheme(initialDark);
+    themeToggle.addEventListener('click', () => {
+      isDarkMode = !isDarkMode;
+      applyTheme(isDarkMode);
+    });
 
-      // Theme toggle event listener
-      themeToggleBtn.addEventListener('click', () => {
-        const isCurrentDark = htmlEl.classList.contains('dark');
-        const nextDark = !isCurrentDark;
-        applyTheme(nextDark);
-        localStorage.setItem('theme', nextDark ? 'dark' : 'light');
-      });
+    // Share functionality
+    const shareBtn = document.getElementById('shareBtn');
+    const shareToast = document.getElementById('shareToast');
 
-      // Share button implementation
-      shareBtn.addEventListener('click', async () => {
-        const shareData = {
-          title: '‘बटरफ्लाय इफेक्ट’ : हवामानापेक्षाही बरेच काही..',
-          text: '‘बटरफ्लाय इफेक्ट’ ही एक अशी संकल्पना आहे, जिच्यानुसार एखाद्या लहान बदलामुळे खूप मोठे आणि अनपेक्षित परिणाम घडून येऊ शकतात.',
-          url: window.location.href,
-        };
+    shareBtn.addEventListener('click', async () => {
+      const shareData = {
+        title: '‘बटरफ्लाय इफेक्ट’ हवामानापेक्षाही बरेच काही..',
+        text: '‘बटरफ्लाय इफेक्ट’ ही एक अशी संकल्पना आहे, जिच्यानुसार एखाद्या लहान, वरवर क्षुल्लक वाटणाऱ्या बदलामुळे खूप मोठे आणि अनपेक्षित परिणाम घडून येऊ शकतात.',
+        url: window.location.href
+      };
 
-        if (navigator.share) {
-          try {
-            await navigator.share(shareData);
-            return;
-          } catch (err) {
-            // If user aborted/dismissed dialog, do nothing; else fallback
-            if (err.name === 'AbortError') return;
-          }
-        }
-
-        // Fallback: Copy link to clipboard
+      if (navigator.share) {
         try {
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            await navigator.clipboard.writeText(window.location.href);
-            showToast('वेबपेज लिंक कॉपी झाली!');
-          } else {
-            // execCommand fallback for strict iframe environments
-            const tempInput = document.createElement('input');
-            tempInput.value = window.location.href;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            showToast('वेबपेज लिंक कॉपी झाली!');
+          await navigator.share(shareData);
+        } catch (err) {
+          if (err.name !== 'AbortError') {
+            copyLinkFallback();
           }
-        } catch (e) {
-          showToast('लिंक कॉपी करणे शक्य झाले नाही');
         }
+      } else {
+        copyLinkFallback();
+      }
+    });
+
+    function copyLinkFallback() {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        showToast('लिंक कॉपी झाली!');
+      }).catch(() => {
+        showToast('लिंक कॉपी करता आली नाही');
       });
-    })();
+    }
+
+    function showToast(message) {
+      shareToast.textContent = message;
+      shareToast.classList.add('show');
+      setTimeout(() => {
+        shareToast.classList.remove('show');
+      }, 2600);
+    }
   </script>
 </body>
 </html>
